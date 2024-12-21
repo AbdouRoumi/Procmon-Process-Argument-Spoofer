@@ -19,13 +19,26 @@ BOOL WriteFromTargetProcess(IN HANDLE hProcess, IN PVOID pAddress, IN PVOID pBuf
 	SIZE_T sNmbrOfBytesWritten = NULL;
 
 	if (!WriteProcessMemory(hProcess, pAddress, pBuffer, dwBufferSize, &sNmbrOfBytesWritten) || sNmbrOfBytesWritten != dwBufferSize) {
-		
+
 		printf("Write Process memory has failed with ERROR : %d\n", GetLastError());
 		printf("Bytes written of %d : %d \n", sNmbrOfBytesWritten, dwBufferSize);
 		return FALSE;
 	}
+
 	return TRUE;
 }
 
 
-BOOL 
+	
+BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DWORD* dwProcessId, OUT HANDLE* hProcess, OUT HANDLE* hThread) {
+
+	NTSTATUS STATUS = NULL;
+	WCHAR szProcess[MAX_PATH];
+	
+	STARTUPINFOW Si = { 0 };
+	PROCESS_INFORMATION Pi = { 0 };
+
+	PROCESS_BASIC_INFORMATION PBI = { 0 };
+
+
+}
