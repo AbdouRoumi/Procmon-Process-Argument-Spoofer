@@ -1,5 +1,5 @@
-# Procmon-Argument-Spoofer
-## [![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=2000&pause=1000&width=435&lines=Welcome+to+Procmon-Argument-Spoofer+Repo!!!;Explore+Windows+Process+Monitoring+Techniques;Educational+purposes+only!)](https://git.io/typing-svg)
+# Procmon-Process-Argument-Spoofer
+## [![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=2000&pause=1000&width=435&lines=Welcome+to+Procmon-Argument-Spoofer+Repo!!!;Explore+Windows+Monitors+Evasion+Techniques;Educational+&+Research+purposes+only!)](https://git.io/typing-svg)
 
 ## Overview
 
