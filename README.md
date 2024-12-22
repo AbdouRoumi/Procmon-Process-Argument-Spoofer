@@ -48,11 +48,8 @@ To set up and run this project:
 
 ### Example Execution:
 ```cmd
-Procmon-Argument-Spoofer.exe --target "C:\Windows\System32\notepad.exe" --spoof "--fake-argument"
+Procmon-Argument-Spoofer.exe
 ```
-- Replace the target process path and spoofed argument as needed.
-- Monitor behavior using tools like **Process Monitor** to verify the spoofing results.
-
 ## Contributing
 
 Contributions are welcome! If you have improvements, bug fixes, or additional techniques, feel free to submit a **Pull Request**.
