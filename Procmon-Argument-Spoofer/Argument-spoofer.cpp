@@ -40,6 +40,8 @@ BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DW
 	ULONG uReturn = NULL;
 	PPEB pPeb = NULL;
 
+	PRTL_USER_PROCESS_PARAMETERS  pParms= NULL;
+
 
 	RtlSecureZeroMemory(&Si, sizeof(STARTUPINFOW));
 	RtlSecureZeroMemory(&Si, sizeof(PROCESS_INFORMATION));
@@ -86,7 +88,17 @@ BOOL CreateArgSpooferProcess(IN LPWSTR szStartupArg, IN LPWSTR szRealArg, OUT DW
 		return FALSE;
 	}
 
-	if(!ReadFromTargetProcess())
+	PVOID pParmsBuffer = NULL;
+
+	if (!ReadFromTargetProcess(Pi.hProcess, pPeb->ProcessParameters, &pParmsBuffer, sizeof(RTL_USER_PROCESS_PARAMETERS)+0xFF)) {
+
+		printf("\t[!] Failed To Read Target's Process ProcessParameters \n"); 
+		return FALSE;
+	}
+
+	pParms = (PRTL_USER_PROCESS_PARAMETERS)pParmsBuffer;
+
+	//Writing real args to the target process
 
 
 }
